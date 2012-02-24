@@ -4,11 +4,11 @@
 
 ;; Author: Nathan Weizenbaum
 ;; URL: http://github.com/nex3/haml/tree/master
-;; Version: 3.0.14
+;; Version: 3.0.15
 ;; Created: 2007-03-15
 ;; By: Nathan Weizenbaum
 ;; Keywords: markup, language, css
-;; Package-Requires: ((haml-mode "3.0.14"))
+;; Package-Requires: ((haml-mode "3.0.15"))
 
 ;;; Commentary:
 
@@ -187,8 +187,8 @@ LIMIT is the limit of the search."
   (set-syntax-table sass-syntax-table)
   (setq font-lock-extend-region-functions
         '(font-lock-extend-region-wholelines font-lock-extend-region-multiline))
-  (setq font-lock-multiline nil)
-  (setq comment-start "/*")
+  (set (make-local-variable 'font-lock-multiline) nil)
+  (set (make-local-variable 'comment-start) "/*")
   (set (make-local-variable 'haml-indent-function) 'sass-indent-p)
   (set (make-local-variable 'haml-indent-offset) sass-indent-offset)
   (setq font-lock-defaults '(sass-font-lock-keywords t t)))
