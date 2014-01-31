@@ -48,6 +48,7 @@
   '("^.*,$" ;; Continued selectors
     "^ *@\\(extend\\|debug\\|warn\\|include\\|import\\)" ;; Single-line mixins
     "^ *[$!]" ;; Variables
+    "^ *[[:alnum:]\\-]+ *:" ;; Plain attribute values
     )
   "A list of regexps that match lines of Sass that couldn't have
 text nested beneath them.")
