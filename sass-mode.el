@@ -216,12 +216,12 @@ LIMIT is the limit of the search."
   "Displays the CSS output for the current block of Sass code.
 Called from a program, START and END specify the region to indent."
   (interactive "r")
-  (let* ((text (buffer-substring-no-properties start end))
-         (command (format "ruby -rubygems -e \"require 'sass'; puts Sass::Engine.new('%s').render\"" text)))
-  (kill-new text)
-  (with-temp-buffer
-    (yank)
-    (shell-command-on-region (point-min) (point-max) command "sass-output"))))
+  (let ((output-buffer "*sass-output*"))
+    (shell-command-on-region start end "sass --stdin" output-buffer)
+    (when (fboundp 'css-mode)
+      (with-current-buffer output-buffer
+        (css-mode)))
+    (switch-to-buffer-other-window output-buffer)))
 
 (defun sass-output-buffer ()
   "Displays the CSS output for entire buffer."
