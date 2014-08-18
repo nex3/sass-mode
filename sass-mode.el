@@ -217,8 +217,12 @@ LIMIT is the limit of the search."
   "Displays the CSS output for the current block of Sass code.
 Called from a program, START and END specify the region to indent."
   (interactive "r")
-  (let ((output-buffer "*sass-output*"))
-    (shell-command-on-region start end "sass --stdin" output-buffer)
+  (let ((output-buffer "*sass-output*")
+        (errors-buffer "*sass-errors*"))
+    (shell-command-on-region start end "sass --stdin"
+                             output-buffer
+                             nil
+                             errors-buffer)
     (when (fboundp 'css-mode)
       (with-current-buffer output-buffer
         (css-mode)))
