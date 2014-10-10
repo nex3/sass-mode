@@ -60,15 +60,15 @@ text nested beneath them.")
     ("\\[\\([^]=]+\\)" (1 font-lock-variable-name-face)
      ("[~|$^*]?=\\([^]=]+\\)" nil nil (1 font-lock-string-face)))
     ("&"       0 font-lock-constant-face)
-    ("\\.\\w+" 0 font-lock-type-face)
-    ("#\\w+"   0 font-lock-keyword-face)
+    ("\\.\\s_+" 0 font-lock-type-face)
+    ("#\\s_+"   0 font-lock-keyword-face)
     ;; Pseudo-selectors, optionally with arguments (e.g. :first, :nth-child(12))
-    ("\\(::?\\w+\\)" (1 font-lock-function-name-face)
+    ("\\(::?\\s_+\\)" (1 font-lock-function-name-face)
      ("(\\([^)]+\\))" nil nil (1 font-lock-string-face)))))
 
 (defconst sass-script-font-lock-keywords
   `(("\"\\([^\"\\\\]\\|\\\\.\\)*\"" 0 font-lock-string-face)
-    ("!\\(\\w\\|_\\)+" 0 font-lock-variable-name-face)
+    ("!\\(\\s_\\)+" 0 font-lock-variable-name-face)
     ("#[0-9a-fA-F]\\{0,6\\}" 0 font-lock-preprocessor-face)
     (,(regexp-opt
        '("true" "false" "black" "silver" "gray" "white" "maroon" "red"
@@ -79,8 +79,6 @@ text nested beneath them.")
 
 (defconst sass-syntax-table
   (let ((st (make-syntax-table)))
-    (modify-syntax-entry ?- "w" st)
-    (modify-syntax-entry ?_ "w" st)
     st))
 
 (defconst sass-script-syntax-table
@@ -92,14 +90,14 @@ text nested beneath them.")
   '((sass-highlight-line 1 nil nil t)))
 
 (defconst sass-line-keywords
-  '(("@\\(\\w+\\)"    0 font-lock-keyword-face sass-highlight-directive)
+  '(("@\\(\\s_+\\)"    0 font-lock-keyword-face sass-highlight-directive)
     ("/[/*].*"  0 font-lock-comment-face)
-    ("[=+]\\w+" 0 font-lock-function-name-face sass-highlight-script-after-match)
-    ("!\\w+"    0 font-lock-variable-name-face sass-highlight-script-after-match)
-    (":\\w+"    0 font-lock-variable-name-face)
-    ("\\w+\s*:" 0 font-lock-variable-name-face)
-    ("\\(\\w+\\)\s*="  1 font-lock-variable-name-face sass-highlight-script-after-match)
-    ("\\(:\\w+\\)\s*=" 1 font-lock-variable-name-face sass-highlight-script-after-match)
+    ("[=+]\\s_+" 0 font-lock-function-name-face sass-highlight-script-after-match)
+    ("!\\s_+"    0 font-lock-variable-name-face sass-highlight-script-after-match)
+    (":\\s_+"    0 font-lock-variable-name-face)
+    ("\\s_+\s*:" 0 font-lock-variable-name-face)
+    ("\\(\\s_+\\)\s*="  1 font-lock-variable-name-face sass-highlight-script-after-match)
+    ("\\(:\\s_+\\)\s*=" 1 font-lock-variable-name-face sass-highlight-script-after-match)
     (".*"      sass-highlight-selector))
   "A list of full-line Sass syntax to highlight, used by `sass-highlight-line'.
 
@@ -156,7 +154,7 @@ LIMIT is the limit of the search."
   (block nil
     (case (intern (match-string 1))
       (for
-       (unless (looking-at " +!\\w+") (return))
+       (unless (looking-at " +!\\s_+") (return))
        (put-text-property (match-beginning 0) (match-end 0)
                           'face font-lock-variable-name-face)
        (goto-char (match-end 0))
