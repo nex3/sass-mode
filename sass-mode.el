@@ -78,7 +78,10 @@ text nested beneath them.")
     (,(regexp-opt '("and" "or" "not")) 0 font-lock-keyword-face)))
 
 (defconst sass-syntax-table
-  (make-syntax-table))
+  (let ((st (make-syntax-table)))
+    (modify-syntax-entry ?- "w" st)
+    (modify-syntax-entry ?_ "w" st)
+    st))
 
 (defconst sass-script-syntax-table
   (let ((st (make-syntax-table sass-syntax-table)))
