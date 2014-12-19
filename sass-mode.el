@@ -8,7 +8,7 @@
 ;; Created: 2007-03-15
 ;; By: Nathan Weizenbaum
 ;; Keywords: markup, language, css
-;; Package-Requires: ((haml-mode "3.0.15"))
+;; Package-Requires: ((haml-mode "3.0.15") (cl-lib "0.5"))
 
 ;;; Commentary:
 
@@ -26,6 +26,7 @@
 ;;; Code:
 
 (require 'haml-mode)
+(require 'cl-lib)
 
 ;; User definable variables
 
@@ -117,7 +118,8 @@ LIMIT is the limit of the search."
     (when (re-search-forward "^ *\\(.+\\)$" limit t)
       (goto-char (match-beginning 1))
       (dolist (keyword sass-line-keywords)
-        (destructuring-bind (keyword subexp-or-fn &optional face fn) keyword
+        (cl-destructuring-bind
+            (keyword subexp-or-fn &optional face fn) keyword
           (when (looking-at keyword)
             (if (integerp subexp-or-fn)
                 (put-text-property (match-beginning subexp-or-fn)
@@ -126,7 +128,7 @@ LIMIT is the limit of the search."
               (setq fn subexp-or-fn))
             (when fn (funcall fn))
             (end-of-line)
-            (return t)))))))
+            (cl-return t)))))))
 
 (defun sass-highlight-selector ()
   "Highlight a CSS selector starting at `point' and ending at `end-of-line'."
@@ -153,14 +155,14 @@ LIMIT is the limit of the search."
 (defun sass-highlight-directive ()
   "Highlight a Sass directive."
   (goto-char (match-end 0))
-  (block nil
-    (case (intern (match-string 1))
+  (cl-block nil
+    (cl-case (intern (match-string 1))
       (for
-       (unless (looking-at " +!\\w+") (return))
+       (unless (looking-at " +!\\w+") (cl-return))
        (put-text-property (match-beginning 0) (match-end 0)
                           'face font-lock-variable-name-face)
        (goto-char (match-end 0))
-       (unless (looking-at " +from") (return))
+       (unless (looking-at " +from") (cl-return))
        (put-text-property (match-beginning 0) (match-end 0)
                           'face font-lock-keyword-face)
        (goto-char (match-end 0))
@@ -171,7 +173,7 @@ LIMIT is the limit of the search."
        (sass-highlight-script-after-match))
 
       (else
-       (unless (looking-at " +if") (return))
+       (unless (looking-at " +if") (cl-return))
        (put-text-property (match-beginning 0) (match-end 0)
                           'face font-lock-keyword-face)
        (sass-highlight-script-after-match))
@@ -207,9 +209,9 @@ LIMIT is the limit of the search."
 
 (defun sass-indent-p ()
   "Return non-nil if the current line can have lines nested beneath it."
-  (loop for opener in sass-non-block-openers
-        if (looking-at opener) return nil
-        finally return t))
+  (cl-loop for opener in sass-non-block-openers
+           if (looking-at opener) return nil
+           finally return t))
 
 ;; Command
 
