@@ -1,12 +1,12 @@
 ;;; sass-mode.el --- Major mode for editing Sass files
 
-;; Copyright (c) 2007, 2008 Nathan Weizenbaum
+;; Copyright (c) 2007, 2008 Natalie Weizenbaum
 
-;; Author: Nathan Weizenbaum
+;; Author: Natalie Weizenbaum
 ;; URL: http://github.com/nex3/haml/tree/master
 ;; Version: 3.0.16
 ;; Created: 2007-03-15
-;; By: Nathan Weizenbaum
+;; By: Natalie Weizenbaum
 ;; Keywords: markup, language, css
 ;; Package-Requires: ((haml-mode "3.0.15") (cl-lib "0.5"))
 
