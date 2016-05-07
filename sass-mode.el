@@ -232,18 +232,25 @@ Called from a program, START and END specify the region to indent."
   (let ((output-buffer "*sass-output*")
         (errors-buffer "*sass-errors*")
         (region-contents (buffer-substring start end)))
-    (with-temp-buffer
-      (insert region-contents)
-      (newline-and-indent)
-      (sass--remove-leading-indent)
-      (shell-command-on-region (point-min) (point-max) "sass --stdin"
-                               output-buffer
-                               nil
-                               errors-buffer))
-    (when (fboundp 'css-mode)
-      (with-current-buffer output-buffer
-        (css-mode)))
-    (switch-to-buffer-other-window output-buffer)))
+    (let ((exit-code
+           (with-temp-buffer
+             (insert region-contents)
+             (newline-and-indent)
+             (sass--remove-leading-indent)
+             (shell-command-on-region (point-min) (point-max) "sass --stdin"
+                                      output-buffer
+                                      nil
+                                      errors-buffer
+                                      t))))
+
+      (if (zerop exit-code)
+          (progn
+            (when (fboundp 'css-mode)
+              (with-current-buffer output-buffer
+                (css-mode)))
+            (switch-to-buffer-other-window output-buffer))
+        (with-current-buffer errors-buffer
+          (view-mode))))))
 
 (defun sass-output-buffer ()
   "Displays the CSS output for entire buffer."
