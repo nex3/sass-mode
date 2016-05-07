@@ -213,19 +213,15 @@ LIMIT is the limit of the search."
            if (looking-at opener) return nil
            finally return t))
 
-;; Utility
-
-(defun sass-remove-trailing-indent ()
-  "Removes the first n empty characters in every line, with n being the trailing whitespace in the first line."
-  (interactive)
+(defun sass--remove-leading-indent ()
+  "Reindent buffer so that the first line content begins in the first column.
+This assumes that the buffer is valid SASS source, such that no
+subsequent line has a lesser indent."
   (let ((min-indent nil))
     (goto-char (point-min))
     (back-to-indentation)
     (setq min-indent (1- (point)))
-    (while (not (equal (line-end-position) (point-max)))
-      (beginning-of-line)
-      (delete-forward-char min-indent)
-      (forward-line))))
+    (indent-rigidly (point-min) (point-max) (- min-indent))))
 
 ;; Command
 
@@ -239,7 +235,7 @@ Called from a program, START and END specify the region to indent."
     (with-temp-buffer
       (insert region-contents)
       (newline-and-indent)
-      (sass-remove-trailing-indent)
+      (sass--remove-leading-indent)
       (shell-command-on-region (point-min) (point-max) "sass --stdin"
                                output-buffer
                                nil
