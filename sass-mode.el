@@ -45,6 +45,11 @@
   :type 'integer
   :group 'sass)
 
+(defcustom sass-command-options nil
+  "Options to pass to the `sass' command."
+  :type 'string
+  :group 'sass)
+
 (defvar sass-non-block-openers
   '("^.*,$" ;; Continued selectors
     "^ *@\\(extend\\|debug\\|warn\\|include\\|import\\)" ;; Single-line mixins
@@ -237,7 +242,7 @@ Called from a program, START and END specify the region to indent."
              (insert region-contents)
              (newline-and-indent)
              (sass--remove-leading-indent)
-             (shell-command-on-region (point-min) (point-max) "sass --stdin"
+             (shell-command-on-region (point-min) (point-max) (mapconcat #'identity (list "sass" sass-command-options "--stdin") " ")
                                       output-buffer
                                       nil
                                       errors-buffer
