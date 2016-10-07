@@ -47,7 +47,7 @@
 
 (defcustom sass-command-options nil
   "Options to pass to the `sass' command."
-  :type 'string
+  :type '(repeat string)
   :group 'sass)
 
 (defcustom sass-before-eval-hook nil
@@ -248,7 +248,10 @@ Called from a program, START and END specify the region to indent."
              (newline-and-indent)
              (run-hooks 'sass-before-eval-hook)
              (sass--remove-leading-indent)
-             (shell-command-on-region (point-min) (point-max) (mapconcat #'identity (list "sass" sass-command-options "--stdin") " ")
+             (shell-command-on-region (point-min)
+                                      (point-max)
+                                      (mapconcat #'identity
+                                                 (append '("sass") sass-command-options '("--stdin")) " ")
                                       output-buffer
                                       nil
                                       errors-buffer
