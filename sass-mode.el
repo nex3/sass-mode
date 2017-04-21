@@ -25,6 +25,9 @@
 
 ;;; Code:
 
+(eval-when-compile
+  (require 'cl-lib))
+
 (require 'haml-mode)
 (require 'cl-lib)
 
