@@ -120,7 +120,7 @@ beginning of non-whitespace on the current line until one matches.
 If it has SUBEXP and FACE, then SUBEXP is highlighted using FACE.
 If it has FN, FN is run.")
 
-(defun sass-highlight-line (limit)
+(cl-defun sass-highlight-line (limit)
   "Highlight a single line using some Sass single-line syntax.
 This syntax is taken from `sass-line-keywords'.
 LIMIT is the limit of the search."
@@ -138,7 +138,7 @@ LIMIT is the limit of the search."
               (setq fn subexp-or-fn))
             (when fn (funcall fn))
             (end-of-line)
-            (cl-return t)))))))
+            (cl-return-from sass-highlight-line t)))))))
 
 (defun sass-highlight-selector ()
   "Highlight a CSS selector starting at `point' and ending at `end-of-line'."
