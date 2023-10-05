@@ -3,8 +3,8 @@
 ;; Copyright (c) 2007, 2008 Natalie Weizenbaum
 
 ;; Author: Natalie Weizenbaum
-;; URL: http://github.com/nex3/haml/tree/master
-;; Version: 3.0.16
+;; URL: https://github.com/nex3/sass-mode
+;; Version: 3.0.19
 ;; Created: 2007-03-15
 ;; By: Natalie Weizenbaum
 ;; Keywords: markup, language, css
